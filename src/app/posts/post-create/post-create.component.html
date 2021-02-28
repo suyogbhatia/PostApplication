@@ -1,4 +1,4 @@
-<h2>Post Create</h2>
+
 <form (submit)="onSavePost(postForm)" #postForm="ngForm">
   <mat-card>
     <mat-form-field>
@@ -7,6 +7,7 @@
       name="title"
       required
       ngModel
+      placeholder="Post Title"
       minlength="3"
       #title="ngModel">
       <mat-error *ngIf="title.invalid">Please enter the valid title here</mat-error>
@@ -15,16 +16,16 @@
       <textarea
       matInput
       name="content"
-      #content
-      rows="5"
+      rows="4"
       required
       ngModel
+      placeholder="Post Content"
       #content="ngModel"></textarea>
       <mat-error *ngIf="content.invalid">Please enter the valid content here</mat-error>
     </mat-form-field>
     <button
     mat-raised-button
     color="primary"
-    type="submit">Save Post</button>
+    type="submit" [disabled]="postForm.invalid">Save Post</button>
   </mat-card>
 </form>
