@@ -4,4 +4,9 @@
 }
 .info-text{
   text-align: center;
+  color: grey;
+  font-size: 14px;
+}
+mat-spinner {
+  margin: auto;
 }

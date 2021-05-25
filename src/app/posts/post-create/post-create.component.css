@@ -1,4 +1,17 @@
 mat-form-field,textarea {
   width: 100%;
 }
-
+mat-spinner {
+  margin: auto;
+}
+input[type="file"] {
+  display: none;
+  /* visibility: hidden; this will allocate the space to the element*/
+}
+.image-preview{
+  height: 5rem;
+  margin: 1rem;
+}
+.image-preview img {
+  height: 100%;
+}
