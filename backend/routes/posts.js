@@ -40,7 +40,9 @@ router.post('', multer({storage:storage}).single("image"), async (req, res, next
   res.status(201).json({
     message: "Post added successfully!",
     post: {
-      ...savedPost,
+      title: savedPost.title,
+      content: savedPost.content,
+      imagePath: savedPost.imagePath,
       id: savedPost._id
     }
   })
@@ -55,22 +57,39 @@ router.get('/:id', async(req, res, next)=>{
   }
 })
 
-router.put('/:id',async (req, res, next)=>{
+router.put('/:id', multer({ storage: storage }).single("image"), async (req, res, next) => {
+  let imagePath;
+  if(req.file){
+    const url = req.protocol + '://' + req.get('host')
+    imagePath = url + '/images/' + req.file.filename
+  } else {
+    imagePath = req.body.imagePath
+  }
   const post = new Post({
     _id: req.body.id,
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    imagePath: imagePath
   })
   updateStatus = await Post.updateOne({_id:req.params.id}, post)
-  console.log(updateStatus);
+  console.log(post, updateStatus);
   res.status(200).json({message:'Update successful!'})
 
 })
 
 // router.use('/api/posts',(req, res, next) => {
 router.get('',async (req, res, next) => {
-  const documents = await Post.find()
-
+  const postQuery = Post.find()
+  const currentPage = +req.query.page
+  const pageSize = +req.query.pagesize
+  if(pageSize && currentPage){
+    postQuery
+      .skip(pageSize * (currentPage - 1))
+      .limit(pageSize);
+  }
+  console.log(req.query)
+  const documents = await postQuery
+  const count = await Post.count();
   // const posts = [
   //   {
   //     id: 'sdadd',
@@ -85,7 +104,8 @@ router.get('',async (req, res, next) => {
   // ];
   res.status(200).json({
     message: 'Posts fetched successfully',
-    posts: documents
+    posts: documents,
+    maxCount: count
   })
 });
 

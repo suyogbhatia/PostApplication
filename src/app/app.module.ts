@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { PostCreateComponent } from './posts/post-create/post-create.component';
+import { LoginComponent } from "./auth/login/login.component";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -10,6 +11,7 @@ import {
   MatCardModule,
   MatExpansionModule,
   MatInputModule,
+  MatPaginatorModule,
   MatProgressSpinnerModule,
   MatToolbarModule
 } from '@angular/material';
@@ -19,12 +21,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SignupComponent } from './auth/signup/signup.component';
 @NgModule({
   declarations: [
     AppComponent,
     PostCreateComponent,
     HeaderComponet,
-    PostListComponent
+    PostListComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +44,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatExpansionModule,
     HttpClientModule,
     MatProgressSpinnerModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent],

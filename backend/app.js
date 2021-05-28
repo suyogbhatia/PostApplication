@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const path = require('path')
 
 const app = express();
 
 const postRoutes = require('./routes/posts')
+const userRoutes = require('./routes/users')
 
 mongoose.connect('mongodb+srv://suyog:0k22hjjiX6iwJz2U@cluster0.r0601.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   {
@@ -40,8 +42,10 @@ app.use(express.json())   //This will parse the body
 app.use(express.urlencoded({       // urlencoded converts the character of a format into characters which can be transmitted over the internet
   extended: true
 }));
+app.use('/images', express.static('backend/images'))
 
 app.use('/api/posts', postRoutes)
+app.use('/api/users', userRoutes)
 
 module.exports = app;
 
