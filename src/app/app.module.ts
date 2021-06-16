@@ -17,11 +17,12 @@ import {
 } from '@angular/material';
 import { HeaderComponet } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupComponent } from './auth/signup/signup.component';
+import { AuthInterceptor } from "./auth/auth-interceptor";
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +48,11 @@ import { SignupComponent } from './auth/signup/signup.component';
     BrowserAnimationsModule,
     MatPaginatorModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    /* multi will allow multiple interceptor to run in the app and won't
+      overwrite the existing ones */
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]  //allows to use non-angular elements named with dash-case(like mat=accordian)
 })
