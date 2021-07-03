@@ -27,19 +27,20 @@ router.post('/login', async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email })
     const passwordCheck = await bcrypt.compare(req.body.password, user.password)
-    if (!user || !passwordCheck) {
+    if (!user || !passwordCheck) {  //if there isn't any user or the password is invalid then qw'll throw an error
       res.status(401).json({
         message: 'Authentication failed'
       })
     }
     const token = jwt.sign(
       { email: user.email, id: user._id },
-      'secret_long_private_password',
-      { expiresIn:'1h' } //how long the token will last
+      'secret_long_private_password', //how long the token will last
+      { expiresIn:'1h' }
     );
     res.status(200).json({
       token: token,
-      expiresIn: 3600
+      expiresIn: 3600,
+      userId: user._id
     })
   } catch (error) {
     console.log(error.message);

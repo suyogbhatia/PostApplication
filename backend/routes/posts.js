@@ -38,7 +38,8 @@ router.post('',
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
-      imagePath: url + '/images/' + req.file.filename
+      imagePath: url + '/images/' + req.file.filename,
+      creator: req.userData.userId
     })
     console.log(post);
     savedPost = await post.save();  //this will insert a new data automatically to a collection named 'posts'(plural form of Post model and all small)
@@ -48,7 +49,8 @@ router.post('',
         title: savedPost.title,
         content: savedPost.content,
         imagePath: savedPost.imagePath,
-        id: savedPost._id
+        id: savedPost._id,
+        creator: savedPost.creator
       }
     })
   })
@@ -77,12 +79,16 @@ router.put('/:id',
       _id: req.body.id,
       title: req.body.title,
       content: req.body.content,
-      imagePath: imagePath
+      imagePath: imagePath,
+      creator: req.userData.creator
     })
-    updateStatus = await Post.updateOne({ _id: req.params.id }, post)
+    updateStatus = await Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
     console.log(post, updateStatus);
-    res.status(200).json({ message: 'Update successful!' })
-
+    if (updateStatus.nModified >= 1) {
+      res.status(200).json({ message: 'Update Successfull' })
+    } else {
+      res.status(401).json({ message: 'Unauthorized' })
+    }
   })
 
 // router.use('/api/posts',(req, res, next) => {
@@ -118,10 +124,13 @@ router.get('', async (req, res, next) => {
 });
 
 router.delete('/:id', checkAuth, async (req, res, next) => {
-  deleteStatus = await Post.deleteOne({ _id: req.params.id })
+  deleteStatus = await Post.deleteOne({ _id: req.params.id, creator: req.userData.userId })
   console.log(deleteStatus);
-  res.status(200).json({ message: 'Post deleted!' })
+  if (deleteStatus.deletedCount >= 1) {
+    res.status(200).json({ message: 'Post deleted!' })
+  } else {
+    res.status(401).json({ message: 'Unauthorized' })
+  }
 })
 
 module.exports = router
-
