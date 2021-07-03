@@ -1,6 +1,8 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, ParamMap } from "@angular/router";
+import { Subscription } from "rxjs";
+import { AuthService } from "src/app/auth/auth.service";
 import { Post } from "../post.model";
 import { PostService } from "../post.service";
 import { mimeType } from "./mime-type.validator";
@@ -10,7 +12,7 @@ import { mimeType } from "./mime-type.validator";
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit, OnDestroy {
   // enteredContent = ''
   // @Output() postCreated = new EventEmitter<Post>()
   private mode: string = 'create';
@@ -19,10 +21,15 @@ export class PostCreateComponent implements OnInit {
   form: FormGroup;
   isLoading: boolean = false;
   imagePreview: string;
+  authStatusSub: Subscription
 
-  constructor(public PostsService: PostService, private route: ActivatedRoute) { }
+  constructor(public PostsService: PostService, private route: ActivatedRoute, private authService: AuthService) { }
 
   ngOnInit() {
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe((res)=>{
+      debugger;
+      this.isLoading = false;
+    })
     this.form = new FormGroup({
       title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)]
@@ -64,7 +71,7 @@ export class PostCreateComponent implements OnInit {
   }
 
   onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0]   //to tell ts that event.target is an input element so that files is a valid property
+    const file = (event.target as HTMLInputElement).files[0];   // to tell ts that event.target is an input element so that files is a valid property
     this.form.patchValue({ image: file })
     this.form.get('image').updateValueAndValidity();
     const reader = new FileReader()
@@ -85,14 +92,18 @@ export class PostCreateComponent implements OnInit {
       content: this.form.value.content,
       imagePath: null,
       creator: null
-    }
+    };
     if (this.mode === 'create') {
-      this.PostsService.addPost({ ...post, image: this.form.value.image })
+      this.PostsService.addPost({ ...post, image: this.form.value.image }) // in case there is an error adding the post the loader in isloading should be hidden
     } else {
       this.PostsService.updatePost({ ...post, id: this.postId }, this.form.value.image)
     }
 
     // this.postCreated.emit(post);
     this.form.reset();
+  }
+
+  ngOnDestroy(){
+    this.authStatusSub.unsubscribe();
   }
 }

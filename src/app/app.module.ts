@@ -9,6 +9,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCardModule,
+  MatDialogModule,
   MatExpansionModule,
   MatInputModule,
   MatPaginatorModule,
@@ -23,6 +24,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthInterceptor } from "./auth/auth-interceptor";
+import { ErrorInterceptor } from './error-interceptor';
+import { ErrorComponent } from './error/error.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +33,8 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
     HeaderComponet,
     PostListComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -46,13 +50,16 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
     HttpClientModule,
     MatProgressSpinnerModule,
     BrowserAnimationsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDialogModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
     /* multi will allow multiple interceptor to run in the app and won't
       overwrite the existing ones */
   ],
+  entryComponents: [ErrorComponent],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]  //allows to use non-angular elements named with dash-case(like mat=accordian)
 })

@@ -42,26 +42,34 @@ router.post('',
       creator: req.userData.userId
     })
     console.log(post);
-    savedPost = await post.save();  //this will insert a new data automatically to a collection named 'posts'(plural form of Post model and all small)
-    res.status(201).json({
-      message: "Post added successfully!",
-      post: {
-        title: savedPost.title,
-        content: savedPost.content,
-        imagePath: savedPost.imagePath,
-        id: savedPost._id,
-        creator: savedPost.creator
-      }
-    })
+    try {
+      savedPost = await post.save();  //this will insert a new data automatically to a collection named 'posts'(plural form of Post model and all small)
+      res.status(201).json({
+        message: "Post added successfully!",
+        post: {
+          title: savedPost.title,
+          content: savedPost.content,
+          imagePath: savedPost.imagePath,
+          id: savedPost._id,
+          creator: savedPost.creator
+        }
+      })
+    } catch (err) {
+      res.status(401).json({ message: "Creating Post Failed!" })
+    }
   })
 
 router.get('/:id',
   async (req, res, next) => {
-    const post = await Post.findById(req.params.id)
-    if (post) {
-      res.status(200).json(post)
-    } else {
-      res.status(404).json({ message: 'Post not Found!' })
+    try {
+      const post = await Post.findById(req.params.id)
+      if (post) {
+        res.status(200).json(post)
+      } else {
+        res.status(404).json({ message: 'Post not Found!' })
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Fetching post failed!' })
     }
   })
 
@@ -82,12 +90,16 @@ router.put('/:id',
       imagePath: imagePath,
       creator: req.userData.creator
     })
-    updateStatus = await Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
-    console.log(post, updateStatus);
-    if (updateStatus.nModified >= 1) {
-      res.status(200).json({ message: 'Update Successfull' })
-    } else {
-      res.status(401).json({ message: 'Unauthorized' })
+    try {
+      updateStatus = await Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
+      console.log(post, updateStatus);
+      if (updateStatus.nModified >= 1) {
+        res.status(200).json({ message: 'Update Successfull' })
+      } else {
+        res.status(401).json({ message: 'Unauthorized' })
+      }
+    } catch (err) {
+      res.status(500).json({ message: "Couldn't update post!" })
     }
   })
 
@@ -103,33 +115,41 @@ router.get('', async (req, res, next) => {
   }
   console.log(req.query)
   const documents = await postQuery
-  const count = await Post.count();
-  // const posts = [
-  //   {
-  //     id: 'sdadd',
-  //     title: 'First post',
-  //     content: 'This is coming from the server'
-  //   },
-  //   {
-  //     id: 'sddafafdd',
-  //     title: 'Second post',
-  //     content: 'This is coming from the server!'
-  //   }
-  // ];
-  res.status(200).json({
-    message: 'Posts fetched successfully',
-    posts: documents,
-    maxCount: count
-  })
+  try {
+    const count = await Post.count();
+    // const posts = [
+    //   {
+    //     id: 'sdadd',
+    //     title: 'First post',
+    //     content: 'This is coming from the server'
+    //   },
+    //   {
+    //     id: 'sddafafdd',
+    //     title: 'Second post',
+    //     content: 'This is coming from the server!'
+    //   }
+    // ];
+    res.status(200).json({
+      message: 'Posts fetched successfully',
+      posts: documents,
+      maxCount: count
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Fetching posts failed!' })
+  }
 });
 
 router.delete('/:id', checkAuth, async (req, res, next) => {
-  deleteStatus = await Post.deleteOne({ _id: req.params.id, creator: req.userData.userId })
-  console.log(deleteStatus);
-  if (deleteStatus.deletedCount >= 1) {
-    res.status(200).json({ message: 'Post deleted!' })
-  } else {
-    res.status(401).json({ message: 'Unauthorized' })
+  try {
+    deleteStatus = await Post.deleteOne({ _id: req.params.id, creator: req.userData.userId })
+    console.log(deleteStatus);
+    if (deleteStatus.deletedCount >= 1) {
+      res.status(200).json({ message: 'Post deleted!' })
+    } else {
+      res.status(401).json({ message: 'Unauthorized' })
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Fetching post failed' })
   }
 })
 

@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     next();  //will move to next middleware if token is verified
   } catch (err) {
     res.status(401).json({
-      message: 'Auth Failed'
+      message: 'You are not authenticated!'
     })
   }
 }

@@ -18,7 +18,7 @@ router.post('/signup', async (req, res, next) => {
     })
   } catch (err) {
     res.status(501).json({
-      error: err
+      message: "Invalid Authentication crendentials!"
     })
   }
 })

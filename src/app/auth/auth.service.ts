@@ -35,7 +35,10 @@ export class AuthService {
     this.http.post(this.apiUrl + '/signup', authData)
       .subscribe(res => {
         console.log(res);
-      })
+        this.router.navigate(['/']);
+      }, error => {
+        this.authStatusListener.next(false);
+      });
   }
 
   loginUser(loginData: AuthData) {
@@ -53,6 +56,8 @@ export class AuthService {
           this.authStatusListener.next(true);
           this.router.navigate(['/']);
         }
+      }, () => { // error
+        this.authStatusListener.next(false);
       });
   }
 
@@ -106,7 +111,7 @@ export class AuthService {
   }
 
   private setAuthTimer(duration: number) {
-    console.log("Setting timer:" + duration / 60 + " minutes");
+    console.log('Setting timer:' + duration / 60 + ' minutes');
     this.tokenTimer = setTimeout(() => {
       this.logout();
     }, duration * 1000);
