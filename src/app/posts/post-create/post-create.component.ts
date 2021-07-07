@@ -1,11 +1,11 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, ParamMap } from "@angular/router";
-import { Subscription } from "rxjs";
-import { AuthService } from "src/app/auth/auth.service";
-import { Post } from "../post.model";
-import { PostService } from "../post.service";
-import { mimeType } from "./mime-type.validator";
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Post } from '../post.model';
+import { PostService } from '../post.service';
+import { mimeType } from './mime-type.validator';
 
 @Component({
   selector: 'app-post-create',
@@ -93,6 +93,8 @@ export class PostCreateComponent implements OnInit, OnDestroy {
       imagePath: null,
       creator: null
     };
+    console.log(this.form.value.image);
+
     if (this.mode === 'create') {
       this.PostsService.addPost({ ...post, image: this.form.value.image }) // in case there is an error adding the post the loader in isloading should be hidden
     } else {
