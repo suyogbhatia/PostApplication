@@ -8,10 +8,10 @@
       <a routerLink="/create" mat-button routerLinkActive="mat-warn">New Post</a>
     </li>
     <li *ngIf="!userIsAuthenticated">
-      <a routerLink="/login" mat-button routerLinkActive="mat-warn">Login</a>
+      <a routerLink="/auth/login" mat-button routerLinkActive="mat-warn">Login</a>
     </li>
     <li *ngIf="!userIsAuthenticated">
-      <a routerLink="/signup" mat-button routerLinkActive="mat-warn">Sign Up</a>
+      <a routerLink="/auth/signup" mat-button routerLinkActive="mat-warn">Sign Up</a>
     </li>
     <li>
       <button  mat-button *ngIf="userIsAuthenticated" (click)="logoutUser()">Logout</button>

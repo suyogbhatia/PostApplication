@@ -32,7 +32,7 @@ exports.loginUser = async (req, res, next) => {
     }
     const token = jwt.sign(
       { email: user.email, id: user._id },
-      'secret_long_private_password', //how long the token will last
+      process.env.JWT_KEY, //how long the token will last
       { expiresIn:'1h' }
     );
     res.status(200).json({

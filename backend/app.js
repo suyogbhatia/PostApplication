@@ -8,17 +8,17 @@ const app = express();
 const postRoutes = require('./routes/posts')
 const userRoutes = require('./routes/users')
 
-mongoose.connect('mongodb+srv://suyog:0k22hjjiX6iwJz2U@cluster0.r0601.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://suyog:' + process.env.MONGO_ATLAS_PW + '@cluster0.r0601.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-    .then(()=>{
-      console.log('Database Connected Successfully')
-    })
-    .catch(()=>{
-      console.log('DB Connection failed!');
-    })
+  .then(() => {
+    console.log('Database Connected Successfully')
+  })
+  .catch(() => {
+    console.log('DB Connection failed!');
+  })
 
 // Connection fails sometimes due to your IP change so update it in Network Access section in mongo
 
@@ -49,4 +49,3 @@ app.use('/api/users', userRoutes)
 
 module.exports = app;
 
-// 0k22hjjiX6iwJz2U

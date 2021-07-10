@@ -12,7 +12,7 @@ import {
 } from '@angular/material';
 
 @NgModule({
-  imports:[
+  imports: [
     MatInputModule,
     MatCardModule,
     MatButtonModule,
@@ -22,7 +22,7 @@ import {
     MatPaginatorModule,
     MatDialogModule
   ],
-  exports:[
+  exports: [
     MatInputModule,
     MatCardModule,
     MatButtonModule,
@@ -33,4 +33,4 @@ import {
     MatDialogModule
   ]
 })
-export class AngularMaterials {}
+export class AngularMaterials { }
