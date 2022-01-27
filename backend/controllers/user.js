@@ -1,5 +1,5 @@
 const User = require('../models/user')
-const bcrypt = require('bcrypt')   //Package for encrypting passwords
+const bcrypt = require('bcryptjs')   //Package for encrypting passwords
 const jwt = require('jsonwebtoken')  // package to create and verify web tokens
 
 exports.createUser = async (req, res, next) => {

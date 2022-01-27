@@ -37,15 +37,20 @@ mongoose.connect('mongodb+srv://suyog:' + process.env.MONGO_ATLAS_PW + '@cluster
 //   next();
 // })
 
-app.use(cors());
-app.use(express.json())   //This will parse the body
+app.use(cors({origin: '*'}));
+app.use(express.json())   // This will parse the body
 app.use(express.urlencoded({       // urlencoded converts the character of a format into characters which can be transmitted over the internet
   extended: true
 }));
-app.use('/images', express.static('backend/images'))
+app.use('/images', express.static(path.join(__dirname,'images')))
+app.use('/', express.static(path.join(__dirname, 'angular')))
 
 app.use('/api/posts', postRoutes)
 app.use('/api/users', userRoutes)
+
+app.use((req,res,next)=>{
+  res.sendFile(path.join(__dirname, 'angular','index.html'));
+})
 
 module.exports = app;
 
