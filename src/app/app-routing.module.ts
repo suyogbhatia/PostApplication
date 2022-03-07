@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: '', component: PostListComponent },
   { path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
-  { path: 'auth', loadChildren: () => import('./auth/auth-routing.module').then(m => m.AuthRoutingModule) } // for newer versions
+  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) } // for newer versions
   // { path: 'auth', loadChildren: './auth/auth-routing.module#AuthRoutingModule' }  // this syntax doesn't work in the newer versions
 ];
 
