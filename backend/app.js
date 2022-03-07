@@ -42,15 +42,15 @@ app.use(express.json())   // This will parse the body
 app.use(express.urlencoded({       // urlencoded converts the character of a format into characters which can be transmitted over the internet
   extended: true
 }));
-app.use('/images', express.static(path.join(__dirname,'images')))
-// app.use('/', express.static(path.join(__dirname, 'angular')))
+app.use('/images', express.static(path.join(__dirname,'images'))) // to serve static files, without this browser won't be able to access the files
+app.use('/', express.static(path.join(__dirname, 'angular')))
 
 app.use('/api/posts', postRoutes)
 app.use('/api/users', userRoutes)
 
-// app.use((req,res,next)=>{
-//   res.sendFile(path.join(__dirname, 'angular','index.html'));
-// })
+app.use((req,res,next)=>{
+  res.sendFile(path.join(__dirname, 'angular','index.html'));
+})
 
 module.exports = app;
 
