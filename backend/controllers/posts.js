@@ -1,7 +1,6 @@
 const Post = require('../models/post')
 exports.createPost = async (req, res, next) => {
   // const post = req.body
-  // console.log(post);
   const url = req.protocol + '://' + req.get('host')
   const post = new Post({
     title: req.body.title,
@@ -81,7 +80,7 @@ exports.getPosts = async (req, res, next) => {
   console.log(req.query)
   const documents = await postQuery
   try {
-    const count = await Post.count();
+    const count = await Post.countDocuments();
     // const posts = [
     //   {
     //     id: 'sdadd',
